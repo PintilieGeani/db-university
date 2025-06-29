@@ -47,3 +47,70 @@ FROM `departments`
 SELECT *
 FROM `teachers`
 where `phone` IS NULL
+
+
+-- Seconda parte
+
+1. SELECT `enrolment_date`, COUNT(*)
+FROM `students`
+GROUP BY `enrolment_date`
+
+2. SELECT `office_address`, COUNT(*)
+FROM `teachers`
+GROUP BY `office_address`
+
+3. SELECT `exam_id`, AVG(`vote`)
+FROM `exam_student`
+GROUP BY `exam_id`
+
+4. SELECT `department_id`, COUNT(*)
+FROM `degrees`
+GROUP BY `department_id`
+
+
+-- Terza parte
+1. SELECT *
+FROM `students`
+INNER JOIN `degrees`
+ON `degrees`.`id` = `students`.`degree_id`
+WHERE `degrees`.`name` = 'Corso di Laurea in Economia';
+
+2. SELECT *
+FROM `degrees`
+INNER JOIN `departments`
+ON `departments`.`id` = `degrees`.`department_id`
+WHERE `degrees`.`level` = 'magistrale'
+AND `departments`.`name` = 'Dipartimento di Neuroscienze';
+
+3. SELECT *
+FROM `courses`
+INNER JOIN `course_teacher` ON `courses`.`id` = `course_teacher`.`course_id`
+WHERE `course_teacher`.`teacher_id` = 44;
+
+4. SELECT 
+    students.*,
+    degrees.name AS degree_name,
+    departments.name AS department_name
+FROM students
+INNER JOIN degrees ON students.degree_id = degrees.id
+INNER JOIN departments ON degrees.department_id = departments.id
+ORDER BY students.surname ASC, students.name ASC;
+
+5. SELECT 
+    degrees.name AS degree_name,
+    courses.name AS course_name,
+    teachers.name AS teacher_name,
+    teachers.surname AS teacher_surname
+FROM degrees
+INNER JOIN courses ON courses.degree_id = degrees.id
+INNER JOIN course_teacher ON course_teacher.course_id = courses.id
+INNER JOIN teachers ON teachers.id = course_teacher.teacher_id
+ORDER BY degree_name, course_name, teacher_surname;
+
+6. SELECT DISTINCT teachers.*
+FROM teachers
+INNER JOIN course_teacher ON course_teacher.teacher_id = teachers.id
+INNER JOIN courses ON courses.id = course_teacher.course_id
+INNER JOIN degrees ON courses.degree_id = degrees.id
+INNER JOIN departments ON degrees.department_id = departments.id
+WHERE departments.name = 'Dipartimento di Matematica';
